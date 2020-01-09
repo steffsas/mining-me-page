@@ -1,6 +1,7 @@
 import { TokenHelper } from "../../helpers/tokenHelper.js";
 import authConfig from "../../config/auth.json";
 import axios from "axios";
+import * as storage from "@/services/storage.js";
 
 export const namespaced = true;
 
@@ -8,26 +9,25 @@ export const namespaced = true;
 const helpers = {};
 
 export const state = {
-  isAuthenticated: false,
+  authenticated: false,
   user: {},
   token: ""
 };
 
 export const mutations = {
   LOGIN(state, values) {
-    console.log(values);
-    state.isAuthenticated = true;
+    state.authenticated = true;
     state.user = values.user;
     state.token = values.token;
-    localStorage.setItem("user", values.user);
-    localStorage.setItem("token", values.token);
+    storage.local.setItem("user", values.user);
+    storage.local.setItem("token", values.token);
   },
   LOGOUT(state) {
     state.isAuthenitcated = false;
     state.user = {};
     state.token = null;
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    storage.local.removeItem("user");
+    storage.local.removeItem("token");
   }
 };
 
@@ -67,29 +67,26 @@ export const actions = {
     });
   },
 
-  logout() {
-    this.isAuthenitcated = false;
-    this.token = false;
-    this.user = {};
-    localStorage.removeItem("user");
+  logout({ commit }) {
+    commit("LOGOUT");
   },
 
   loginOnRefresh({ commit }) {
-    let user = localStorage.getItem("user");
-    let token = localStorage.getItem("token");
+    let user = storage.local.getItem("user");
+    let token = storage.local.getItem("token");
 
     return new Promise(resolve => {
       if (!!user && !!token) {
-        let valid = new TokenHelper(token).checkValidity();
-        if (valid) {
-          commit("LOGIN", {
-            user: user,
-            token: token
-          });
-          resolve("Login successful!");
-        } else {
-          throw new Error("Toke not valid!");
+        try {
+          new TokenHelper(token).checkValidity();
+        } catch (error) {
+          throw error;
         }
+        commit("LOGIN", {
+          user: user,
+          token: token
+        });
+        resolve("Login successful!");
       } else {
         throw new Error("Storage empty!");
       }

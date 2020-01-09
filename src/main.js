@@ -6,9 +6,14 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import Notifications from "vue-notification";
 
+// Vue config
 Vue.config.productionTip = false;
 
+// use notification in vue
 Vue.use(Notifications);
+
+// auto-login after page reload
+store.dispatch("user/loginOnRefresh");
 
 new Vue({
   router,

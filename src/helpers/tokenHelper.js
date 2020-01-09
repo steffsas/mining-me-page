@@ -1,4 +1,4 @@
-import jwtDecode from "jwt-decode";
+import * as jwt_decode from "jwt-decode";
 
 class TokenHelper {
   constructor(token) {
@@ -6,7 +6,7 @@ class TokenHelper {
   }
 
   checkValidity() {
-    let decoded = jwtDecode.jwt_decode(this.token);
+    let decoded = jwt_decode(this.token);
     const now = Date.now().valueOf() / 1000;
     if (typeof decoded.exp !== "undefined" && decoded.exp < now) {
       throw new Error(`Token expired: ${JSON.stringify(decoded)}`);
@@ -14,6 +14,7 @@ class TokenHelper {
     if (typeof decoded.nbf !== "undefined" && decoded.nbf > now) {
       throw new Error(`Token not yet valid: ${JSON.stringify(decoded)}`);
     }
+    return true;
   }
 }
 
