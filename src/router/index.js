@@ -39,9 +39,14 @@ const router = new VueRouter({
 
 // eslint-disable-next-line no-unused-vars
 router.beforeEach((to, from, next) => {
-  if (Store.state.user.authenticated || to.name === "login") {
+  if (to.name === "login" && Store.state.user.isauthenticated) {
+    console.log("hier");
+    next();
+  } else if (Store.state.user.isauthenticated) {
+    console.log("auth");
     next();
   } else {
+    console.log("no auth");
     next({
       name: "login"
     });

@@ -2,6 +2,7 @@ import { TokenHelper } from "../../helpers/tokenHelper.js";
 import authConfig from "../../config/auth.json";
 import axios from "axios";
 import * as storage from "@/services/storage.js";
+import { getField } from "vuex-map-fields";
 
 export const namespaced = true;
 
@@ -94,4 +95,6 @@ export const actions = {
   }
 };
 
-export const getters = {};
+export const getters = {
+  getField
+};

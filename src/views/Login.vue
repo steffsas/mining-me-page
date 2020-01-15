@@ -12,7 +12,7 @@
         <v-row>
           <v-col>
             <v-card-text class="text-center">
-              <v-icon size="100" color="#0b647d">fab fa-battle-net</v-icon>
+              <v-icon size="100" color="#595959">fas fa-poo-storm</v-icon>
             </v-card-text>
           </v-col>
         </v-row>
